@@ -1,27 +1,44 @@
-resource "local_file" "anton" {
-  filename = "anton.txt"
-  content  = "Anton loves humus!"
+# resource "local_file" "file" {
+#   filename = each.value
+#   content  = "Anton loves humus! - ${each.key} - ${each.value}"
 
-  # depends_on = [ local_file.anton3 ]
+#   for_each = var.filename_map
+# }
+
+variable "filename_map" {
+    default = {
+        "первый" = "pervyi.txt",
+        "второй" = "vtoroi.txt",
+        "третий" = "tretii.txt"
+    }
 }
 
-resource "local_file" "anton2" {
-  filename = "anton2.txt"
-  content  = "Anton loves humus!"
-  file_permission = "0640"
-
-  depends_on = [ local_file.anton ]
-}
-
-resource "local_file" "anton3" {
-  filename = "anton3.txt"
-  content  = "Anton loves humus!"
-  file_permission = "0640"
-
-  depends_on = [ local_file.anton2 ]
-}
+# output "file_contents" {
+#   value = local_file.file
+#   sensitive = true
+# }
 
 resource "random_pet" "pet" {
   length    = 2
   separator = ""
 }
+
+# resource "local_file" "anton1" {
+#   filename        = "anton.txt"
+#   content         = "Anton loves humus!"
+
+# }
+
+# resource "local_file" "anton2" {
+#   filename        = "anton.txt"
+#   content         = "Anton loves humus!"
+# }
+
+# resource "random_pet" "pet" {
+#   length    = 2
+#   separator = ""
+# }
+
+# data "local_file" "petname" {
+#   filename = "petname.txt"
+# }

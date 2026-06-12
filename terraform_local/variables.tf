@@ -26,13 +26,13 @@ variable "admin_username" {
   default     = "azureuser"
 }
 
-variable "admin_ssh_public_key" {
-  description = "SSH public key used to authenticate to the VM."
-  type        = string
-}
+# variable "admin_ssh_public_key" {
+#   description = "SSH public key used to authenticate to the VM."
+#   type        = string
+# }
 
 variable "allowed_ssh_ip" {
   description = "IP address allowed to access SSH port 22."
   type        = string
-  default     = "0.0.0.0"
+  default     = "37.232.79.65"
 }
