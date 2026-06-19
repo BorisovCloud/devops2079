@@ -6,11 +6,11 @@
 # }
 
 variable "filename_map" {
-    default = {
-        "первый" = "pervyi.txt",
-        "второй" = "vtoroi.txt",
-        "третий" = "tretii.txt"
-    }
+  default = {
+    "первый" = "pervyi.txt",
+    "второй" = "vtoroi.txt",
+    "третий" = "tretii.txt"
+  }
 }
 
 # output "file_contents" {

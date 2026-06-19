@@ -1,7 +1,7 @@
 resource "azurerm_resource_group" "rg" {
   name     = "rg-demo"
   location = "East US"
-  tags = var.tags
+  tags     = var.tags
   # lifecycle {
   #   replace_triggered_by = [
   #     random_pet.pet
@@ -27,10 +27,10 @@ resource "azurerm_resource_group" "rg" {
 # }
 
 resource "azurerm_resource_group" "rg2" {
-  location   = "eastus"
-  name       = "rg-demo2"
-    tags       = {
-        "environment" = "demooooo"
-        "owner"       = "demo owner"
-    }
+  location = "eastus"
+  name     = "rg-demo2"
+  tags = {
+    "environment" = "demooooo"
+    "owner"       = "demo owner"
+  }
 }
