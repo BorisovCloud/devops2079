@@ -1,12 +1,11 @@
-resource "azurerm_resource_group" "rg" {
-  name     = "rg-demo"
-  location = "East US"
-  tags     = var.tags
-  # lifecycle {
-  #   replace_triggered_by = [
-  #     random_pet.pet
-  #   ]
-  # }
+# resource "azurerm_resource_group" "rg" {
+#   name     = "rg-demo"
+#   location = "East US"
+#   tags     = var.tags
+# }
+
+data "azurerm_resource_group" "rg" {
+  name = "rg-demo"
 }
 
 # resource "azurerm_storage_account" "storage" {
@@ -19,18 +18,18 @@ resource "azurerm_resource_group" "rg" {
 #   tags                            = var.tags
 #   network_rules {
 #     default_action = "Deny"
-#     ip_rules       = toset([var.allowed_ssh_ip])
+#     ip_rules       = toset([trimspace(data.http.my_ip.response_body)])
 #   }
 #   lifecycle {
 #     ignore_changes = all
 #   }
 # }
 
-resource "azurerm_resource_group" "rg2" {
-  location = "eastus"
-  name     = "rg-demo2"
-  tags = {
-    "environment" = "demooooo"
-    "owner"       = "demo owner"
-  }
-}
+# resource "azurerm_resource_group" "rg2" {
+#   location = "eastus"
+#   name     = "rg-demo2"
+#   tags = {
+#     "environment" = "demooooo"
+#     "owner"       = "demo owner"
+#   }
+# }

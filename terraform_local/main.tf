@@ -1,3 +1,12 @@
+data "http" "my_ip" {
+  url = "https://ifconfig.io"
+}
+
+output "my_ip" {
+  value = trimspace(data.http.my_ip.response_body)
+}
+
+
 # resource "local_file" "file" {
 #   filename = each.value
 #   content  = "Anton loves humus! - ${each.key} - ${each.value}"

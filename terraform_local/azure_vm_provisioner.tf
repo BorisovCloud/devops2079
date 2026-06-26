@@ -1,30 +1,35 @@
+data "azurerm_ssh_public_key" "my_key" {
+  name                = "my-key"
+  resource_group_name = data.azurerm_resource_group.rg.name
+}
+
 resource "azurerm_virtual_network" "vm_vnet_provisioner" {
-  name                = "${var.vm_name_provisioner}-vnet"
+  name                = "${random_pet.pet.id}-vnet"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
   tags                = var.tags
 }
 
 resource "azurerm_subnet" "vm_subnet_provisioner" {
-  name                 = "${var.vm_name_provisioner}-subnet"
-  resource_group_name  = azurerm_resource_group.rg.name
+  name                 = "${random_pet.pet.id}-subnet"
+  resource_group_name  = data.azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vm_vnet_provisioner.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
 resource "azurerm_public_ip" "vm_pip_provisioner" {
-  name                = "${var.vm_name_provisioner}-pip"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${random_pet.pet.id}-pip"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
   allocation_method   = "Static"
   tags                = var.tags
 }
 
 resource "azurerm_network_security_group" "vm_nsg_provisioner" {
-  name                = "${var.vm_name_provisioner}-nsg"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${random_pet.pet.id}-nsg"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
   tags                = var.tags
 
   security_rule {
@@ -35,7 +40,7 @@ resource "azurerm_network_security_group" "vm_nsg_provisioner" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "${var.allowed_ssh_ip}/32"
+    source_address_prefix      = "${trimspace(data.http.my_ip.response_body)}/32"
     destination_address_prefix = "*"
   }
 
@@ -53,9 +58,9 @@ resource "azurerm_network_security_group" "vm_nsg_provisioner" {
 }
 
 resource "azurerm_network_interface" "vm_nic_provisioner" {
-  name                = "${var.vm_name_provisioner}-nic"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  name                = "${random_pet.pet.id}-nic"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
   tags                = var.tags
 
   ip_configuration {
@@ -72,9 +77,9 @@ resource "azurerm_network_interface_security_group_association" "vm_nic_nsg_prov
 }
 
 resource "azurerm_linux_virtual_machine" "vm_provisioner" {
-  name                  = var.vm_name_provisioner
-  resource_group_name   = azurerm_resource_group.rg.name
-  location              = azurerm_resource_group.rg.location
+  name                  = "${random_pet.pet.id}-${var.vm_name_provisioner}"
+  resource_group_name   = data.azurerm_resource_group.rg.name
+  location              = data.azurerm_resource_group.rg.location
   size                  = var.vm_size
   admin_username        = var.admin_username
   network_interface_ids = [azurerm_network_interface.vm_nic_provisioner.id]
@@ -82,7 +87,7 @@ resource "azurerm_linux_virtual_machine" "vm_provisioner" {
 
   admin_ssh_key {
     username   = var.admin_username
-    public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDrqKFXdrT3lp6A0LAgfBLIuDJ8M21JgvKLmTMuQnRXU6DZ5E1mTH9Eo+N4CgHGBsXz/+QJWM0m/t76R57EC66fbFqlIrSHComCjSnxFOxUdIPwTTXucUmzTumOHNxOpFM62/tytKbmJxL0c+iXFzzQB7i4l3AiHzMZ3WI33CfvqZSIKr9MBntVBBcvsTYJD4Tbyx+wyXFeTl4y0qFSSMqW0JttIi7e0ZEyMWPmvmSkbXsm1M93rUUF3rJBQ+T/h+pgJrwrx2CvvdvOR62JCKniVYXDIlJCedw1CyJK3VYdpzQOwbQOFfpDyiZ8ka+booO1Q530bHllElOdKHmYyVRNce8d1vnUmLyRZYCVPykqZsssfm5rdDZX4aAPAhmgLVeq1UtZdrOtzFaDTeE8gMTkGI1BjPKdnse2iNPvQD67X12p+2pV26SwafaPsGuLxcdDGrBwa2+hZinYx0le+UXr7+RfjRIdZUsu7j8C2HteBCEdrrPvNNil+U/tUhrlYY0= generated-by-azure"
+    public_key = data.azurerm_ssh_public_key.my_key.public_key
   }
 
   os_disk {
@@ -99,8 +104,8 @@ resource "azurerm_linux_virtual_machine" "vm_provisioner" {
 
   connection {
     type        = "ssh"
-    user        = var.admin_username
-    host        = azurerm_public_ip.vm_pip_provisioner.ip_address
+    user        = self.admin_username
+    host        = self.public_ip_address
     private_key = file("~/Downloads/my-key.pem")
   }
 
@@ -118,6 +123,21 @@ resource "azurerm_linux_virtual_machine" "vm_provisioner" {
 
   provisioner "local-exec" {
     command = "echo ${azurerm_public_ip.vm_pip_provisioner.ip_address} > my-vm-ip.txt"
+  }
+
+  provisioner "local-exec" {
+    when = destroy
+    command = "rm my-vm-ip.txt"
+  }
+
+  provisioner "remote-exec" {
+    when = destroy
+    on_failure = fail
+    inline = [
+      "echo '<!doctype html><html><body><h1>VM is being destroyed</h1><p>Shalom! Destroy-time provisioner completed successfully.</p></body></html>' | sudo tee /var/www/html/index.html",
+      "sudo systemctl restart nginx",
+      "sleep 30"
+    ]
   }
 }
 
