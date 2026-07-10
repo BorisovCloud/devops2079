@@ -27,10 +27,10 @@ variable "filename_map" {
 #   sensitive = true
 # }
 
-resource "random_pet" "pet" {
-  length    = 2
-  separator = ""
-}
+# resource "random_pet" "pet" {
+#   length    = 2
+#   separator = ""
+# }
 
 # resource "local_file" "anton1" {
 #   filename        = "anton.txt"

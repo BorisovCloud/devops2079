@@ -1,3 +1,13 @@
+variable "workspace_suffix" {
+  type        = map(string)
+  description = "A map of suffixes to assign to the resources."
+  default = {
+    "default" = "default"
+    "dev"  = "development"
+    "prod" = "production"
+  }
+}
+
 variable "tags" {
   type        = map(string)
   description = "A map of tags to assign to the resources."
