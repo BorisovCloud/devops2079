@@ -27,6 +27,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-slim
+    needs: pre-job
     env:
       level: "job"
 
