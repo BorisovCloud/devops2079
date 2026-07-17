@@ -49,5 +49,4 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          sleep 60
-          echo Shalom Avi!
+          echo Hello, ${{env.level}}!
