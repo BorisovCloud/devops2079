@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+	"time"
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "shalom, world! %s\n", time.Now().Format("2006-01-02 15:04:05"))
+}
 
 func main() {
-	fmt.Println("shalom, world! :)")
+	http.HandleFunc("/", handler)
+	http.ListenAndServe(":8080", nil)
 }
