@@ -3,8 +3,8 @@ variable "workspace_suffix" {
   description = "A map of suffixes to assign to the resources."
   default = {
     "default" = "default"
-    "dev"  = "development"
-    "prod" = "production"
+    "dev"     = "development"
+    "prod"    = "production"
   }
 }
 
@@ -41,3 +41,14 @@ variable "admin_username" {
   type        = string
   default     = "azureuser"
 }
+
+# variable "ghcr_username" {
+#   description = "GitHub username for GitHub Container Registry authentication."
+#   type        = string
+# }
+
+# variable "ghcr_token" {
+#   description = "GitHub Personal Access Token with read:packages scope for GHCR."
+#   type        = string
+#   sensitive   = true
+# }
