@@ -27,3 +27,4 @@ terraform.rc
 # .terraform.lock.hcl
 credentials-velero
 .terraform.lock.hcl
+credentials-velero
