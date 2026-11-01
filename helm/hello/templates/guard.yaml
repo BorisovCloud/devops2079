@@ -1,0 +1,10 @@
+{{- if and (eq .Values.environment "prod") (eq .Values.image.tag "latest") }}
+{{- fail "environment=prod: тег latest запрещён, укажите версию" }}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: guard
+data:
+  environment: {{ .Values.environment | quote }}
+  image: {{ printf "%s:%s" .Values.image.repository (required "image.tag обязателен: --set image.tag=<версия>" .Values.image.tag) | quote }}
