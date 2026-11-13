@@ -15,3 +15,10 @@ kubectl port-forward service/argo-cd-argocd-server -n argo-cd 8080:443
 ```
 
 [Open ArgoCD](http://localhost:8080)
+
+## First application
+
+```text
+Repo: https://github.com/BorisovCloud/devops2079.git
+Path: gitops/hellogo-app
+```
