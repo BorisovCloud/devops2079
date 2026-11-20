@@ -1,4 +1,6 @@
 configs:
+  cm:
+    exec.enabled: true
   params:
     server.insecure: true
 dex:

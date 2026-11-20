@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hellogo-app-b
+  namespace: argo-cd
+spec:
+  destination:
+    namespace: hellogo-app-b
+    server: https://kubernetes.default.svc
+  project: project-b
+  source:
+    path: gitops/hellogo-app
+    repoURL: https://github.com/BorisovCloud/devops2079.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      enabled: true
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
