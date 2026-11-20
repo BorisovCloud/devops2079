@@ -45,9 +45,11 @@
    ReplicaSet, поды, Service, Secret.
 
 3. **Откройте приложение в браузере.**
+
    ```bash
    kubectl -n hellogo port-forward service/hello-service 8081:80
    ```
+
    **Проверка:** http://localhost:8081 показывает приветствие с вашим именем (порт 8080 занят Argo CD).
 
 4. **Измените приложение через git — и только через git.** В `deployment.yaml` поменяйте число
